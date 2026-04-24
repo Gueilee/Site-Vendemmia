@@ -1,26 +1,272 @@
-@import "tailwindcss";
+/* ── Fallback web font (Outfit é visualmente próximo ao Nexa) ── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ── Nexa font (adicione arquivos em /public/fonts/ para produção) ── */
+@font-face {
+  font-family: 'Nexa';
+  src: local('Nexa Light'), local('Nexa-Light'),
+       url('/fonts/Nexa-Light.woff2') format('woff2'),
+       url('/fonts/Nexa-Light.woff') format('woff');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nexa';
+  src: local('Nexa'), local('Nexa Regular'), local('Nexa-Regular'),
+       url('/fonts/Nexa-Regular.woff2') format('woff2'),
+       url('/fonts/Nexa-Regular.woff') format('woff');
+  font-weight: 400 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nexa';
+  src: local('Nexa Bold'), local('NexaBold'), local('Nexa-Bold'),
+       url('/fonts/Nexa-Bold.woff2') format('woff2'),
+       url('/fonts/Nexa-Bold.woff') format('woff');
+  font-weight: 600 700 800;
+  font-display: swap;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: #faf9f5;
+    color: #414042;
+    font-family: 'Nexa', 'Outfit', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(66, 44, 118, 0.15);
+    color: #2d1e52;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #faf9f5; }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(#422c76, #ff2f69);
+    border-radius: 3px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+
+  /* ── CARD (substituiu glass no tema claro) ─────────────── */
+  .glass {
+    background: #ffffff;
+    border: 1px solid rgba(66, 44, 118, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 2px 16px rgba(66, 44, 118, 0.06);
+  }
+
+  /* glass em seções escuras (brand purple) */
+  .glass-dark {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 24px;
+  }
+
+  .glass-hover {
+    transition: all 0.3s ease;
+  }
+  .glass-hover:hover {
+    border-color: rgba(66, 44, 118, 0.18);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(66, 44, 118, 0.12);
+  }
+
+  /* ── GRADIENT BORDER ───────────────────────────────────── */
+  .gradient-border {
+    position: relative;
+    border-radius: 24px;
+    background: #ffffff;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #422c76, #ff2f69);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .gradient-border:hover::before { opacity: 1; }
+
+  /* ── SOFT BLOBS (tema claro) ───────────────────────────── */
+  .glow-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .glow-violet {
+    background: radial-gradient(circle, rgba(66, 44, 118, 0.12) 0%, transparent 70%);
+  }
+  .glow-magenta {
+    background: radial-gradient(circle, rgba(255, 47, 105, 0.10) 0%, transparent 70%);
+  }
+  .glow-cyan {
+    background: radial-gradient(circle, rgba(1, 225, 142, 0.10) 0%, transparent 70%);
+  }
+  /* versões para seções escuras */
+  .glow-violet-dark {
+    background: radial-gradient(circle, rgba(92, 63, 168, 0.35) 0%, transparent 70%);
+  }
+  .glow-magenta-dark {
+    background: radial-gradient(circle, rgba(255, 47, 105, 0.25) 0%, transparent 70%);
+  }
+
+  /* ── DOT GRID (substituiu bg-grid) ────────────────────── */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(66, 44, 118, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(66, 44, 118, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .bg-dots {
+    background-image: radial-gradient(circle, rgba(66, 44, 118, 0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* ── TEXT GRADIENT ─────────────────────────────────────── */
+  .text-gradient {
+    background: linear-gradient(135deg, #422c76, #ff2f69);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-tech {
+    background: linear-gradient(135deg, #01E18E, #422c76);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  /* versão clara (sobre fundos escuros) */
+  .text-gradient-light {
+    background: linear-gradient(135deg, #b9a9e0, #ff6b96);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── SECTION LABEL ─────────────────────────────────────── */
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    background: rgba(66, 44, 118, 0.07);
+    border: 1px solid rgba(66, 44, 118, 0.15);
+    border-radius: 9999px;
+    color: #422c76;
+    font-family: 'Nexa', 'Outfit', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .section-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #ff2f69;
+    border-radius: 50%;
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+  /* versão sobre fundo escuro */
+  .section-label-dark {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.20);
+    color: #b9a9e0;
+  }
+  .section-label-dark::before {
+    background: #ff2f69;
+  }
+
+  /* ── BUTTONS ───────────────────────────────────────────── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #422c76, #ff2f69);
+    border-radius: 9999px;
+    color: white;
+    font-family: 'Nexa', 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(255, 47, 105, 0.25);
+    cursor: pointer;
+    border: none;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 32px rgba(255, 47, 105, 0.35);
+  }
+  .btn-primary:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 27px;
+    background: transparent;
+    border: 1.5px solid #422c76;
+    border-radius: 9999px;
+    color: #422c76;
+    font-family: 'Nexa', 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .btn-secondary:hover {
+    background: rgba(66, 44, 118, 0.06);
+    border-color: #422c76;
+    transform: translateY(-2px);
+  }
+  /* versão sobre fundo escuro */
+  .btn-secondary-dark {
+    border-color: rgba(255, 255, 255, 0.30);
+    color: white;
+  }
+  .btn-secondary-dark:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.50);
+  }
+
+  /* ── SCROLLBAR oculta para seções com overflow ──────────── */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* ── DIVIDER ───────────────────────────────────────────── */
+  .divider-brand {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(66,44,118,0.15), transparent);
+  }
+  .divider-light {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  }
 }

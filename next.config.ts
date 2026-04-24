@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.GITHUB_ACTIONS === 'true'
+
 const nextConfig: NextConfig = {
+  output: 'export',
+  basePath: isProd ? '/Site-Vendemmia' : '',
+  trailingSlash: true,
   images: {
     unoptimized: true,
   },
